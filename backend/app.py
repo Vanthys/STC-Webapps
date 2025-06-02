@@ -1,4 +1,4 @@
-from flask import Flask, g, request
+from flask import Flask, g, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def get_proteins():
     proteins = []
     for protein in proteins_list:
         proteins.append({'name': protein[1], 'sequence' : protein[2]})
-    return proteins
+    return jsonify(proteins)
 
 @app.route("/api/protein/<name>")
 def get_protein(name):
@@ -40,9 +40,9 @@ def get_protein(name):
     cur.execute("SELECT name, sequence FROM proteins WHERE name LIKE ?", [name])
     result = cur.fetchone() #should return one
     if result:
-        return {"sequence": result[1]}
+        return jsonify({"sequence": result[1]})
     else:
-        return {"error": "Protein not found"}, 404
+        return jsonify({"error": "Protein not found"}), 404
 
 
 # uplaoding proteins
@@ -51,7 +51,7 @@ def upload_protein():
     data = request.get_json()
 
     if not data or 'name' not in data or 'sequence' not in data:
-        return {"error": "JSON must include 'name' and 'sequence'"}, 400
+        return jsonify({"error": "JSON must include 'name' and 'sequence'"}), 400
 
     name = data['name']
     sequence = data['sequence']
@@ -65,7 +65,7 @@ def upload_protein():
     except sqlite3.IntegrityError as e:
         return {"error": str(e)}, 400
 
-    return {"message": f"Protein '{name}' added successfully!"}, 201
+    return jsonify({"message": f"Protein '{name}' added successfully!"}), 201
 
 
 # For starting more conventional

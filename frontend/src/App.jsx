@@ -1,11 +1,24 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import "./styles/App.css"
 import ProteinList from './components/ProteinList'
 
 
 function App() {
 
-  const [proteins, setProteins] = useState([{name: "fdhv9", sequence: "MKIVLVLYDAGKHAADEEKLYGCTENKLGIANWLKDQGHELITTSDKEGGNSVLDQHIPDADIIITTPFHPAYITKERIDKAKKLKLVVVAGVGSDHIDLDYINQTGKKISVLEVTGSNVVSVAEHVLMTMLVLVRNFVPAHEQIINHDWEVAAIAKDAYDIEGKTIATIGAGRIGYRVLERLVPFNPKELLYYDYQALPKDAEEKVGARRVENIEELVAQADIVTINAPLHAGTKGLINKELLSKFKKGAWLVNTARGAICVAEDVAAALESGQLRGYGGDVWFPQPAPKDHPWRDMRNKYGAGNAMTPHYSGTTLDAQTRYAEGTKNILESFFTGKFDYRPQDIILLNGEYITKAYGKHDKK"}])
+  const [proteins, setProteins] = useState([])
+
+  useEffect(() =>  {
+    	const fetchProteins = async () =>{
+        const response = await fetch("api/protein");
+        const json = await response.json();
+        if (Object.hasOwn(json, "error")){
+          console.error(json.error)
+          return;
+        }
+        setProteins(json);
+      }
+      fetchProteins()
+  }, [])
 
   const nameRef = useRef();
   const seqRef = useRef();
