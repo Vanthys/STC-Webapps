@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.fullwidth{
+  width: 100%; 
+}
+
+.threequarterswidth{
+    width: 75%;
+}
+
+label {
+    align-self: self-start;
+    margin-bottom: 2px;
+}
+
+
+textarea, input {
+    resize: none;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid green;
+    border-radius: 5px;
+    outline: 0;
+    transition: outline 100ms ease-in-out;
+
+    &:focus{
+        outline: 2px solid yellowgreen;
+    }
+}
+
+button {
+    border: 0;
+    padding: 10px;
+    border-radius: 5px;
+    background: #ccc;
+    cursor: pointer;
+    transition: background 100ms ease-in-out, transform 50ms ease-out;
+    
+    &:hover{
+        background: #aeeec2;
+    }
+
+    &:active{
+        transform: scale(1.1, 1.1);
+        background: #bbddc6;
+    }
+}
+
