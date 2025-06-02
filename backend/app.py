@@ -1,8 +1,10 @@
 from flask import Flask, g, request, jsonify
+from flask_cors import CORS
+
 import sqlite3
 
 app = Flask(__name__)
-
+CORS(app)
 
 DATABASE = 'database/protein.db'
 

@@ -23,7 +23,7 @@ function App() {
   const nameRef = useRef();
   const seqRef = useRef();
 
-  const UploadProtein = (e) => {
+  const UploadProtein = async (e) => {
     //e -> event information. If you are in a form the submit button will usually redirect you, but we skipped this here.
     e.preventDefault(); //stop propagation of event, we will handle the button press here!
     
@@ -42,16 +42,31 @@ function App() {
       name, //will expand to "name": name internally
       sequence: seq
     }
-    
-    //proteins.push(newProtein) //wont do anything, as we need to update the state!!! 
-    setProteins([...proteins, newProtein]); // needed for react! 
-    
-    //Finally clear the textboxes
+     try {
+      const response = await fetch("/api/protein", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProtein),
+      });
 
-    nameRef.current.value = "";
-    seqRef.current.value = "";
-  
-  
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Server error:", result.error);
+        return;
+      }
+
+      // Update UI after successfu upload
+      setProteins([...proteins, newProtein]);
+
+      //Finally clear the textboxes
+      nameRef.current.value = "";
+      seqRef.current.value = "";
+
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+    
   }
   return (
       <div className="container fullwidth">
